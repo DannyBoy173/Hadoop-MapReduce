@@ -41,7 +41,7 @@ public class TriGramCounter {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         Job job = Job.getInstance(conf, "word count");
-        job.setJarByClass(WordCount.class);
+        job.setJarByClass(TriGramCounter.class);
         job.setMapperClass(WCMapper.class);
         job.setReducerClass(WCReducer.class);
         job.setOutputKeyClass(Text.class);
