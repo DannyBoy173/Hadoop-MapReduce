@@ -19,11 +19,12 @@ public class TriGramCounter {
         
         // mapper function
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-            ArrayList<String> words = new ArrayList<String>(value.toString().replaceAll("[^a-zA-Z ]", "").split("\\s+")); // remove punctuation and split on the setOutputValueClass
+            String[] words = value.toString().replaceAll("[^a-zA-Z ]", "").split("\\s+"); // remove punctuation and split on the setOutputValueClass
+            ArrayList<String> wordsList = new ArrayList<String>(Arrays.asList(words)); // converts to arraylist
 
             // iterate through the list until 3 from end and create 3-grams
-            for (int i = 0; i < words.size() - 2; i++){
-                ArrayList<String> threeGram = new ArrayList<String>(words.subList(i, i+3)); // create a list of 3-grams
+            for (int i = 0; i < wordsList.size() - 2; i++){
+                ArrayList<String> threeGram = new ArrayList<String>(wordsList.subList(i, i+3)); // create a list of 3-grams
                 String threeGramString = String.join(" ", threeGram); // convert list to string, separated by spaces
                 word.set(threeGramString); // set the word to be a 3-gram
                 context.write(word, one); // assign value 'one' to word
