@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.StringTokenizer;
 
 import org.apache.hadoop.conf.Configuration;
@@ -18,13 +19,24 @@ public class TriGramCounter {
         
         // mapper function
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
+            ArrayList<String> words = value.replaceAll("[^a-zA-Z ]", "").split("\\s+"); // remove punctuation and split on the spaces
+
+            // iterate through the list until 3 from end and create 3-grams
+            for (int i = 0; i < words.size() - 2; i++){
+                ArrayList<String> threeGram = new ArrayList<String>(words.subList(i, i+3)); // create a list of 3-grams
+                String threeGramString = String.join(" ", threeGram); // convert list to string, separated by spaces
+                word.set(threeGramString); // set the word to be a 3-gram
+                context.write(word, one); // assign value 'one' to word
+            }
+
+            /*
             StringTokenizer itr = new StringTokenizer(value.toString(), " \t\n\r\f,.:;?![]'"); // separates line into list of words based on criteria
-            
+
             // iterate through each word in the tokenized list
             while (itr.hasMoreTokens()) {
                 word.set(itr.nextToken()); // set the word
                 context.write(word, one); // assign value 'one' to word
-            }
+            }*/
         }
     }
     
