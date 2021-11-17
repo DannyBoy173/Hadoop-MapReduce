@@ -20,30 +20,20 @@ public class TriGramCounter {
         
         // mapper function
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-            String[] words = value.toString().replaceAll("[^a-zA-Z ]", "").split("\\s+"); // remove punctuation and split on the setOutputValueClass
-            ArrayList<String> wordsList = new ArrayList<String>(Arrays.asList(words)); // converts to arraylist
+            String line = value.toString().toLowerCase(); // create string and convert to lower case
+            String[] words = line.replaceAll("[^a-z\\s]", "").split("\\s+"); // remove punctuation and split on whitespace
+            ArrayList<String> wordsList = new ArrayList<String>(Arrays.asList(words)); // converts to arraylist - for operations
             System.out.println("The words list: " + wordsList);
 
             // iterate through the list until 2 from end and create 3-grams
             for (int i = 0; i < wordsList.size() - 2; i++){
-                ArrayList<String> threeGram = new ArrayList<String>(wordsList.subList(i, i+3)); // create a list of 3-grams
-                System.out.println("The 3 gram list: " + threeGram);
+                ArrayList<String> triGram = new ArrayList<String>(wordsList.subList(i, i+3)); // create a list of 3-grams
+                String triGramString = String.join(" ", triGram); // convert list to string, separated by spaces
+                System.out.println("The tri gram string: " + triGramString);
 
-                String threeGramString = String.join(" ", threeGram); // convert list to string, separated by spaces
-                System.out.println("The 3 gram string: " + threeGram);
-
-                word.set(threeGramString); // set the word to be a 3-gram
+                word.set(triGramString); // set the word to be a 3-gram
                 context.write(word, one); // assign value 'one' to word
             }
-
-            /*
-            StringTokenizer itr = new StringTokenizer(value.toString(), " \t\n\r\f,.:;?![]'"); // separates line into list of words based on criteria
-
-            // iterate through each word in the tokenized list
-            while (itr.hasMoreTokens()) {
-                word.set(itr.nextToken()); // set the word
-                context.write(word, one); // assign value 'one' to word
-            }*/
         }
     }
     
