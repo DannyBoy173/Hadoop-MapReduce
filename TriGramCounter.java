@@ -20,7 +20,7 @@ public class TriGramCounter {
         
         // mapper function
         public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-            String line = value.toString().toLowerCase(); // create string and convert to lower case
+            String line = value.toString().toLowerCase().trim(); // create string and convert to lower case & trim whitespace
             String[] words = line.replaceAll("[^a-z\\s]", "").split("\\s+"); // remove punctuation and split on whitespace
             ArrayList<String> wordsList = new ArrayList<String>(Arrays.asList(words)); // converts to arraylist - for operations
             System.out.println("The words list: " + wordsList);
