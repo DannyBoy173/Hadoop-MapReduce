@@ -44,6 +44,7 @@ public class TriGramCounter {
             String word = key.toString();
             if(numReduceTasks==0){
                 return 0;
+            }
             
             // swtich based on first character - send to corresponding reducer
             switch (word.charAt(0)){
@@ -163,6 +164,5 @@ public class TriGramCounter {
         FileOutputFormat.setOutputPath(job, new Path(args[1])); // define where the output should go - from CL
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
-}
 }
 
