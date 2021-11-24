@@ -47,60 +47,44 @@ public class TriGramCounter {
                 return 0;
             }
             
-            // swtich based on first character - send to corresponding reducer
+            // swtich based on first character - send to corresponding reducer (multiple letters grouped in reducers)
+            // this has been load balanced based off observations of frequency of first chars
             switch (word.charAt(0)){
                 case 'a':
                     return 0;
                 case 'b':
-                    return 1;
                 case 'c':
-                    return 2;
+                    return 1;
                 case 'd':
-                    return 3;
                 case 'e':
-                    return 4;
                 case 'f':
-                    return 5;
+                    return 2;
                 case 'g':
-                    return 6;
                 case 'h':
-                    return 7;
                 case 'i':
-                    return 8;
+                    return 3;
                 case 'j':
-                    return 9;
                 case 'k':
-                    return 10;
                 case 'l':
-                    return 11;
                 case 'm':
-                    return 12;
                 case 'n':
-                    return 13;
+                    return 4;
                 case 'o':
-                    return 14;
                 case 'p':
-                    return 15;
+                    return 5;
                 case 'q':
-                    return 16;
                 case 'r':
-                    return 17;
                 case 's':
-                    return 18;
+                    return 6;
                 case 't':
-                    return 19;
+                    return 7;
                 case 'u':
-                    return 20;
                 case 'v':
-                    return 21;
                 case 'w':
-                    return 22;
                 case 'x':
-                    return 23;
                 case 'y':
-                    return 24;
                 case 'z':
-                    return 25;
+                    return 8;
                 default:
                     return 0;
             }
@@ -133,7 +117,7 @@ public class TriGramCounter {
         job.setMapperClass(TGCMapper.class); // mapper class
         job.setReducerClass(TGCReducer.class); // reducer class
         job.setPartitionerClass(TGCPartitioner.class); // partitioner class
-        job.setNumReduceTasks(26); // set num reducers to 26 - one for each letter in alphabet
+        job.setNumReduceTasks(9); // set num reducers to 9 - grouped by letter frequencies
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
@@ -143,7 +127,7 @@ public class TriGramCounter {
         job.setSpeculativeExecution(true);
         job.setMapSpeculativeExecution(true);
         job.setReduceSpeculativeExecution(true);
-        
+
         // setup intermediate compression
         conf.set("mapreduce.map.output.compress", "true");
         conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
