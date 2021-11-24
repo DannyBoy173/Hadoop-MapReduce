@@ -123,12 +123,9 @@ public class TriGramCounter {
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
         FileOutputFormat.setOutputPath(job, new Path(args[1])); // define where the output should go - from CL
         
-        /*
         // turn on speculative execution
-        job.setSpeculativeExecution(true);
         job.setMapSpeculativeExecution(true);
         job.setReduceSpeculativeExecution(true);
-        */
 
         // setup intermediate compression
         conf.set("mapreduce.map.output.compress", "true");
