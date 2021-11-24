@@ -38,8 +38,9 @@ public class TriGramCounter {
     }
 
     // custom partitioner to sort output alphabetically
-    public static class TGCPartitioner extends Partitioner<Text, Text> {
-        public int getPartition(Text key, Text value, int numReduceTasks) {
+    public static class TGCPartitioner extends Partitioner<Text, IntWritable> {
+        @Override
+        public int getPartition(Text key, IntWritable value, int numReduceTasks) {
             String word = key.toString();
             if(numReduceTasks==0){
                 return 0;
