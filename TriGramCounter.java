@@ -130,8 +130,6 @@ public class TriGramCounter {
         }
     }
 
-
-    
     public static class TGCReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
         private IntWritable result = new IntWritable();
         
@@ -148,6 +146,7 @@ public class TriGramCounter {
             context.write(key, result); // output: key, result
         }
     }
+
     public static void main(String[] args) throws Exception {
         // preparing environment for hadoop job
         Configuration conf = new Configuration();
@@ -165,3 +164,5 @@ public class TriGramCounter {
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
 }
+}
+
