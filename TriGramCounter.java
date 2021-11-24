@@ -43,9 +43,6 @@ public class TriGramCounter {
         @Override
         public int getPartition(Text key, IntWritable value, int numReduceTasks) {
             String word = key.toString();
-            if(numReduceTasks==0){
-                return 0;
-            }
             
             // swtich based on first character - send to corresponding reducer
             switch (word.charAt(0)){
