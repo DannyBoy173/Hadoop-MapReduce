@@ -36,6 +36,101 @@ public class TriGramCounter {
             }
         }
     }
+
+    // custom partitioner to sort output alphabetically
+    public static class TGCPartitioner extends Partitioner<Text, Text> {
+        @Override
+        public int getPartition(Text key, Text value, int numReduceTasks) {
+            String word = key.toString();
+            if(numReduceTasks==0){
+                return 0;
+            
+            // swtich based on first character - send to corresponding reducer
+            switch (word.charAt(0)){
+                case 'a':
+                    return 0;
+                break;
+                case 'b':
+                    return 1;
+                break;
+                case 'c':
+                    return 2;
+                break;
+                case 'd':
+                    return 3;
+                break;
+                case 'e':
+                    return 4;
+                break;
+                case 'f':
+                    return 5;
+                break;
+                case 'g':
+                    return 6;
+                break;
+                case 'h':
+                    return 7;
+                break;
+                case 'i':
+                    return 8;
+                break;
+                case 'j':
+                    return 9;
+                break;
+                case 'k':
+                    return 10;
+                break;
+                case 'l':
+                    return 11;
+                break;
+                case 'm':
+                    return 12;
+                break;
+                case 'n':
+                    return 13;
+                break;
+                case 'o':
+                    return 14;
+                break;
+                case 'p':
+                    return 15;
+                break;
+                case 'q':
+                    return 16;
+                break;
+                case 'r':
+                    return 17;
+                break;
+                case 's':
+                    return 18;
+                break;
+                case 't':
+                    return 19;
+                break;
+                case 'u':
+                    return 20;
+                break;
+                case 'v':
+                    return 21;
+                break;
+                case 'w':
+                    return 22;
+                break;
+                case 'x':
+                    return 23;
+                break;
+                case 'y':
+                    return 24;
+                break;
+                case 'z':
+                    return 25;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+
     
     public static class TGCReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
         private IntWritable result = new IntWritable();
@@ -61,6 +156,8 @@ public class TriGramCounter {
         job.setJarByClass(TriGramCounter.class); // implementation of job
         job.setMapperClass(TGCMapper.class); // mapper class
         job.setReducerClass(TGCReducer.class); // reducer class
+        job.setPartitionerClass(TGCPartitioner.class); // partitioner class
+        job.setNumReduceTasks(26); // set num reducers to 26 - one for each letter in alphabet
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
