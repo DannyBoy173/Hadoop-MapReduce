@@ -140,9 +140,10 @@ public class TriGramCounter {
         
         // optimisations
         job.setNumReduceTasks(26); // set num reducers to 26 - one for each letter in alphabet
-        conf.set("mapreduce.map.output.compress", "true");
-        conf.set("mapreduce.map.tasks.speculative.execution", "true");
-        conf.set("mapreduce.reduce.tasks.speculative.exection", "true");    
+        job.setCompressMapOutput(true);
+        job.setSpeculativeExecution(true);
+        job.setMapSpeculativeExecution(true);
+        job.setReduceSpeculativeExecution(true);
 
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
