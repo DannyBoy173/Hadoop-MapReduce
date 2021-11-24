@@ -133,11 +133,17 @@ public class TriGramCounter {
         job.setMapperClass(TGCMapper.class); // mapper class
         job.setReducerClass(TGCReducer.class); // reducer class
         job.setPartitionerClass(TGCPartitioner.class); // partitioner class
-        job.setNumReduceTasks(26); // set num reducers to 26 - one for each letter in alphabet
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
         FileOutputFormat.setOutputPath(job, new Path(args[1])); // define where the output should go - from CL
+        
+        // optimisations
+        job.setNumReduceTasks(26); // set num reducers to 26 - one for each letter in alphabet
+        conf.set("mapreduce.map.output.compress", true);
+        conf.set("mapreduce.map.tasks.speculative.execution", true);
+        conf.set("mapreduce.reduce.tasks.speculative.exection", true);     
+
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
 }
