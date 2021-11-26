@@ -15,6 +15,9 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 public class TriGramCounter {
+    // input: gs://coc105-gutenburg-10000books
+    // output: gs://danbaulk-tgc/output
+
     public static class TGCMapper extends Mapper<Object, Text, Text, IntWritable>{
         private final static IntWritable one = new IntWritable(1); // defines the number 1 to be counted
         private Text word = new Text();
