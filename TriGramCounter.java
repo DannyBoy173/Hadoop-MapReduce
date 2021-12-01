@@ -133,11 +133,11 @@ public class TriGramCounter {
         job.setReduceSpeculativeExecution(true);
 
         // setup intermediate compression
-        conf.set("mapreduce.map.output.compress", "true");
-        conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+        job.getConfiguration().set("mapreduce.map.output.compress", "true");
+        job.getConfiguration().set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
 
         // set split size
-        conf.set("mapreduce.input.fileinputformat.split.maxsize", "134217728L");
+        job.getConfiguration().set("mapreduce.input.fileinputformat.split.maxsize", "134217728L");
 
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
