@@ -131,7 +131,7 @@ public class TriGramCounter {
         job.setReducerClass(TGCReducer.class); // reducer class
         job.setPartitionerClass(TGCPartitioner.class); // partitioner class
         job.setNumReduceTasks(9); // set num reducers to 9 - grouped by letter frequencies
-        job.setInputFormatClass(TGCConverger.class); // set the file input format to be combined and with a split size of 128mb
+        job.setInputFormatClass(TGCCombiner.class); // set the file input format to be combined and with a split size of 128mb
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
