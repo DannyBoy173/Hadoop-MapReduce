@@ -19,15 +19,6 @@ public class TriGramCounter {
     // input: gs://coc105-gutenburg-10000books
     // output: gs://danbaulk-tgc/output
 
-    // creating a custom combiner
-    public class TGCCombiner extends CombineTextInputFormat{
-    public TGCCombiner()
-    {
-    // setting block size to 128mb
-    this.setMaxSplitSize(134217728L);
-    }
-    }
-
     public static class TGCMapper extends Mapper<Object, Text, Text, IntWritable>{
         private final static IntWritable one = new IntWritable(1); // defines the number 1 to be counted
         private Text word = new Text();
@@ -131,7 +122,7 @@ public class TriGramCounter {
         job.setReducerClass(TGCReducer.class); // reducer class
         job.setPartitionerClass(TGCPartitioner.class); // partitioner class
         job.setNumReduceTasks(9); // set num reducers to 9 - grouped by letter frequencies
-        job.setInputFormatClass(TGCCombiner.class); // set the file input format to be combined and with a split size of 128mb
+        job.setInputFormatClass(CombineTextInputFormat.class); // set the file input format to be combined
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
@@ -144,6 +135,9 @@ public class TriGramCounter {
         // setup intermediate compression
         conf.set("mapreduce.map.output.compress", "true");
         conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+
+        // set split size
+        conf.set("mapred.max.split.size", "134217728L");
 
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
