@@ -137,7 +137,7 @@ public class TriGramCounter {
         conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
 
         // set split size
-        conf.set("mapred.max.split.size", "134217728L");
+        conf.set("mapreduce.input.fileinputformat.split.maxsize", "134217728L");
 
         System.exit(job.waitForCompletion(true) ? 0 : 1); // finish up the job
     }
