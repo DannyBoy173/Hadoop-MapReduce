@@ -13,10 +13,20 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.input.CombineTextInputFormat;
 
 public class TriGramCounter {
     // input: gs://coc105-gutenburg-10000books
     // output: gs://danbaulk-tgc/output
+
+    // creating a custom combiner
+    public class TGCCombiner extends CombineTextInputFormat{
+    public TGCCombiner()
+    {
+    // setting block size to 128mb
+    this.setMaxSplitSize(134217728L);
+    }
+    }
 
     public static class TGCMapper extends Mapper<Object, Text, Text, IntWritable>{
         private final static IntWritable one = new IntWritable(1); // defines the number 1 to be counted
@@ -121,6 +131,7 @@ public class TriGramCounter {
         job.setReducerClass(TGCReducer.class); // reducer class
         job.setPartitionerClass(TGCPartitioner.class); // partitioner class
         job.setNumReduceTasks(9); // set num reducers to 9 - grouped by letter frequencies
+        job.setInputFormatClass(Converger.class); // set the file input format to be combined and with a split size of 128mb
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
         FileInputFormat.addInputPath(job, new Path(args[0])); // define where the input is specified - from CL
